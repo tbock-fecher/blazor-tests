@@ -54,4 +54,19 @@ TestResult.xml
 nunit-*.xml
 
 *.vsidx
-/CalculatorDemo.Blazor/.vs/CalculatorDemo.Blazor/v18/.suo
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+*.code-workspace
