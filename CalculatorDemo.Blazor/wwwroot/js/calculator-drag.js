@@ -33,8 +33,8 @@
         window.addEventListener("resize", handler);
     };
 
-    const attachDrag = (element) => {
-        const handle = element.querySelector(".calc-header") || element;
+    const attachDrag = (element, handleSelector, ignoreSelector) => {
+        const handle = element.querySelector(handleSelector) || element;
         let offsetX = 0;
         let offsetY = 0;
         let dragging = false;
@@ -68,6 +68,10 @@
                 return;
             }
 
+            if (ignoreSelector && event.target.closest(ignoreSelector)) {
+                return;
+            }
+
             const rect = element.getBoundingClientRect();
             dragging = true;
             element.classList.add("is-dragging");
@@ -92,7 +96,17 @@
             element.dataset.dragEnabled = "true";
             placeInitially(element);
             attachResizeGuard(element);
-            attachDrag(element);
+            attachDrag(element, ".calc-header");
+        },
+        enableModalDrag: (element) => {
+            if (!element || element.dataset.modalDragEnabled === "true") {
+                return;
+            }
+
+            element.dataset.modalDragEnabled = "true";
+            placeInitially(element);
+            attachResizeGuard(element);
+            attachDrag(element, ".calc-modal-head", ".drag-ignore");
         }
     };
 })();

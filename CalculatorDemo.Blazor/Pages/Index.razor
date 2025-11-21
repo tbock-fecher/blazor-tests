@@ -71,13 +71,39 @@
     </div>
 </div>
 
+@if (showResultModal)
+{
+    <div class="calc-modal-backdrop" role="dialog" aria-modal="true">
+        <div class="calc-modal" @ref="resultModalRef" @onclick:stopPropagation>
+            <div class="calc-modal-head">
+                <div class="calc-modal-title">Ergebnis</div>
+                <button type="button" class="calc-modal-close drag-ignore" aria-label="Schließen" @onclick="ConfirmResult">×</button>
+            </div>
+            <div class="calc-modal-value">@latestResult</div>
+            <button type="button" class="calc-btn accent wide" @onclick="ConfirmResult">OK</button>
+        </div>
+    </div>
+}
+
 @code {
     private readonly CalculatorState state = new();
     private ElementReference calcShellRef;
+    private bool showResultModal;
+    private string latestResult = "0";
+    private ElementReference resultModalRef;
 
     private void Digit(char c) => state.ProcessKey(c);
 
-    private void Operation(OperationKey op) => state.ProcessOperation(op);
+    private void Operation(OperationKey op)
+    {
+        state.ProcessOperation(op);
+
+        if (op == OperationKey.Equal && string.IsNullOrEmpty(state.Error))
+        {
+            latestResult = state.Display;
+            showResultModal = true;
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -85,5 +111,15 @@
         {
             await JS.InvokeVoidAsync("calculatorDrag.enableDrag", calcShellRef);
         }
+
+        if (showResultModal)
+        {
+            await JS.InvokeVoidAsync("calculatorDrag.enableModalDrag", resultModalRef);
+        }
+    }
+
+    private void ConfirmResult()
+    {
+        showResultModal = false;
     }
 }
