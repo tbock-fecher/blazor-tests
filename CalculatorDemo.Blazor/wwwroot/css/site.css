@@ -68,13 +68,22 @@ a, .btn-link {
     }
 
 .calc-shell {
-    max-width: 720px;
-    margin: 2.5rem auto;
+    width: min(720px, calc(100vw - 32px));
+    margin: 0 auto;
     padding: 1.5rem;
+    position: fixed;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
     background: radial-gradient(circle at 10% 20%, #22334a 0, #1a2435 40%, #0f1623 100%);
     color: #f7fbff;
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(4, 10, 20, 0.65);
+    z-index: 10;
+}
+
+.calc-shell.is-dragging {
+    box-shadow: 0 24px 70px rgba(4, 10, 20, 0.8);
 }
 
 .calc-header {
@@ -82,6 +91,9 @@ a, .btn-link {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
 }
 
 .memory-chip {

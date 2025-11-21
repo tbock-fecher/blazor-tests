@@ -1,10 +1,11 @@
 @page "/"
 @using CalculatorDemo.Blazor.Data
 @using OperationKey = CalculatorDemo.Blazor.Data.CalculatorState.OperationKey
+@inject IJSRuntime JS
 
 <PageTitle>Calculator</PageTitle>
 
-<div class="calc-shell">
+<div class="calc-shell" id="calculator-window" @ref="calcShellRef">
     <div class="calc-header">
         <div>
             <h1>Calculator</h1>
@@ -72,8 +73,17 @@
 
 @code {
     private readonly CalculatorState state = new();
+    private ElementReference calcShellRef;
 
     private void Digit(char c) => state.ProcessKey(c);
 
     private void Operation(OperationKey op) => state.ProcessOperation(op);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("calculatorDrag.enableDrag", calcShellRef);
+        }
+    }
 }
