@@ -7,8 +7,22 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
+            "name": "Chrome Debug localhost",
+            "url": "http://localhost:5181",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "edge",
+            "request": "launch",
+            "name": "Edge Debug localhost",
+            "url": "http://localhost:5181",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "Firefox Debug localhost",
+            "url": "http://localhost:5181",
             "webRoot": "${workspaceFolder}"
         }
     ]
