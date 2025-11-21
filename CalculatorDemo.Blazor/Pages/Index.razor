@@ -1,0 +1,79 @@
+@page "/"
+@using CalculatorDemo.Blazor.Data
+@using OperationKey = CalculatorDemo.Blazor.Data.CalculatorState.OperationKey
+
+<PageTitle>Calculator</PageTitle>
+
+<div class="calc-shell">
+    <div class="calc-header">
+        <div>
+            <h1>Calculator</h1>
+            <p class="text-muted mb-2">Ported aus der WPF-Demo.</p>
+        </div>
+        <div class="memory-chip">@state.MemoryLabel</div>
+    </div>
+
+    <div class="calc-display">@state.Display</div>
+    @if (!string.IsNullOrEmpty(state.Error))
+    {
+        <div class="calc-error">@state.Error</div>
+    }
+
+    <div class="calc-grid" aria-label="Calculator keypad">
+        <button type="button" class="calc-btn warn" style="grid-row: 1; grid-column: 5;" @onclick="() => Operation(OperationKey.ClearEntry)">CE</button>
+        <button type="button" class="calc-btn warn" style="grid-row: 1; grid-column: 6;" @onclick="() => Operation(OperationKey.ClearAll)">C</button>
+
+        <button type="button" class="calc-btn muted" style="grid-row: 2; grid-column: 1;" @onclick="() => Operation(OperationKey.MemoryClear)">MC</button>
+        <button type="button" class="calc-btn" style="grid-row: 2; grid-column: 2;" @onclick="() => Digit('7')">7</button>
+        <button type="button" class="calc-btn" style="grid-row: 2; grid-column: 3;" @onclick="() => Digit('8')">8</button>
+        <button type="button" class="calc-btn" style="grid-row: 2; grid-column: 4;" @onclick="() => Digit('9')">9</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 2; grid-column: 5;" @onclick="() => Operation(OperationKey.Divide)">/</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 2; grid-column: 6;" @onclick="() => Operation(OperationKey.Sqrt)">Sqrt</button>
+
+        <button type="button" class="calc-btn muted" style="grid-row: 3; grid-column: 1;" @onclick="() => Operation(OperationKey.MemoryRecall)">MR</button>
+        <button type="button" class="calc-btn" style="grid-row: 3; grid-column: 2;" @onclick="() => Digit('4')">4</button>
+        <button type="button" class="calc-btn" style="grid-row: 3; grid-column: 3;" @onclick="() => Digit('5')">5</button>
+        <button type="button" class="calc-btn" style="grid-row: 3; grid-column: 4;" @onclick="() => Digit('6')">6</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 3; grid-column: 5;" @onclick="() => Operation(OperationKey.Multiply)">*</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 3; grid-column: 6;" @onclick="() => Operation(OperationKey.Percent)">%</button>
+
+        <button type="button" class="calc-btn muted" style="grid-row: 4; grid-column: 1;" @onclick="() => Operation(OperationKey.MemorySave)">MS</button>
+        <button type="button" class="calc-btn" style="grid-row: 4; grid-column: 2;" @onclick="() => Digit('1')">1</button>
+        <button type="button" class="calc-btn" style="grid-row: 4; grid-column: 3;" @onclick="() => Digit('2')">2</button>
+        <button type="button" class="calc-btn" style="grid-row: 4; grid-column: 4;" @onclick="() => Digit('3')">3</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 4; grid-column: 5;" @onclick="() => Operation(OperationKey.Subtract)">-</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 4; grid-column: 6;" @onclick="() => Operation(OperationKey.OneOver)">1/X</button>
+
+        <button type="button" class="calc-btn muted" style="grid-row: 5; grid-column: 1;" @onclick="() => Operation(OperationKey.MemoryPlus)">M+</button>
+        <button type="button" class="calc-btn" style="grid-row: 5; grid-column: 2;" @onclick="() => Digit('0')">0</button>
+        <button type="button" class="calc-btn" style="grid-row: 5; grid-column: 3;" @onclick="() => Digit('.')">.</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 5; grid-column: 4;" @onclick="() => Operation(OperationKey.Negate)">+/-</button>
+        <button type="button" class="calc-btn accent" style="grid-row: 5; grid-column: 5;" @onclick="() => Operation(OperationKey.Add)">+</button>
+        <button type="button" class="calc-btn equal" style="grid-row: 5; grid-column: 6;" @onclick="() => Operation(OperationKey.Equal)">=</button>
+    </div>
+
+    <div class="paper-shell">
+        <div class="paper-header">Paper Trail</div>
+        <div class="paper-body">
+            @if (state.Paper.Count == 0)
+            {
+                <div class="text-muted">Noch keine Berechnungen.</div>
+            }
+            else
+            {
+                @foreach (var line in state.Paper)
+                {
+                    <div>@line</div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private readonly CalculatorState state = new();
+
+    private void Digit(char c) => state.ProcessKey(c);
+
+    private void Operation(OperationKey op) => state.ProcessOperation(op);
+}
