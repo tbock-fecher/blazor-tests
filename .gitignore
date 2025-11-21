@@ -52,3 +52,6 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+*.vsidx
+/CalculatorDemo.Blazor/.vs/CalculatorDemo.Blazor/v18/.suo
